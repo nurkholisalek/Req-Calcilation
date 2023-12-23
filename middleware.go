@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type CustomMux struct {
 	http.ServerMux
@@ -18,4 +21,18 @@ func (c *CustomMux) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 		current = next(current)
 	}
 	current.ServeHTTP(w, r)
+}
+
+func MiddleWareUtility(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request))
+	ctx := r.Context()
+
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	from := r.Header.Get("Referer")
+	if from == "" {
+		from = r.Host
+	}
+
 }
