@@ -34,5 +34,8 @@ func MiddleWareUtility(next http.Handler) http.Handler {
 	if from == "" {
 		from = r.Host
 	}
+	ctx = context.WithValue(ctx, "from", from)
 
+	RequestWithContext := r.WithContext(ctx)
+	next.ServeHTTP(w, RequestWithContext)
 }
